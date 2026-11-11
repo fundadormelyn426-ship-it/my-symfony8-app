@@ -1,0 +1,88 @@
+{% extends 'dashboard/layout.html.twig' %}
+
+{% block page_title %}Orders{% endblock %}
+{% block page_subtitle %}Manage customer orders{% endblock %}
+
+{% block content %}
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon bg-green"><i class="bi bi-receipt"></i></div>
+        <div>
+            <small>Total Orders</small>
+            <h3>{{ orders|length }}</h3>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon bg-orange"><i class="bi bi-clock-history"></i></div>
+        <div>
+            <small>Pending</small>
+            <h3>{{ orders|filter(o => o.status == 'Pending')|length }}</h3>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon bg-blue"><i class="bi bi-check-circle"></i></div>
+        <div>
+            <small>Completed</small>
+            <h3>{{ orders|filter(o => o.status == 'Completed')|length }}</h3>
+        </div>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-header">
+        <h3>All Orders</h3>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Customer</th>
+                <th>Total</th>
+                <th>Payment</th>
+                <th>Status</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td><b>#{{ order.id }}</b></td>
+                <td>
+                    {{ order.user ? order.user.name : 'Guest' }}<br>
+                    <small style="color:#7a6350;">{{ order.user ? order.user.email : '—' }}</small>
+                </td>
+                <td>₱{{ order.total|number_format(2) }}</td>
+                <td>
+                    {{ order.paymentMethod ?? '—' }}
+                    {% if order.paymentMethod == 'GCash' and order.gcashReference %}
+                        <br><small style="color:#7a6350;">Ref: {{ order.gcashReference }}</small>
+                    {% endif %}
+                </td>
+                <td>
+                    <span style="font-weight:700;
+                        {% if order.status == 'Completed' %}color:#28551e;
+                        {% elseif order.status == 'Cancelled' %}color:#a13b27;
+                        {% elseif order.status == 'Pending' %}color:#c9863b;
+                        {% else %}color:#2c6eb5;{% endif %}">
+                        {{ order.status }}
+                    </span>
+                </td>
+                <td>{{ order.createdAt ? order.createdAt|date('M d, Y H:i') : '—' }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" class="empty-state">
+                    📦 No orders yet.<br>
+                    <small>Orders will appear here once customers place them.</small>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

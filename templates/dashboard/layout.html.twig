@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dashboard - Fundador Coffee Shop{% endblock %}</title>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Fundador CSS -->
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+    <style>
+        /* Dashboard-specific styles */
+        body { margin: 0; font-family: "DM Sans", Arial, sans-serif; background: #f7efe5; }
+
+        .dashboard-wrap { display: flex; min-height: 100vh; }
+
+        .sidebar {
+            width: 240px;
+            background: #2b1206;
+            color: #fff;
+            padding: 22px 0;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .sidebar .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 22px 22px;
+            border-bottom: 1px solid #4a2a18;
+            margin-bottom: 18px;
+        }
+
+        .sidebar .brand .cup { font-size: 28px; }
+        .sidebar .brand b { font: 700 16px "Playfair Display", serif; display: block; }
+        .sidebar .brand small { font-size: 10px; letter-spacing: 1px; opacity: .7; }
+
+        .sidebar-nav { display: flex; flex-direction: column; padding: 0 12px; }
+
+        .nav-label {
+            font-size: 10px;
+            letter-spacing: 2px;
+            opacity: .5;
+            padding: 14px 10px 6px;
+            text-transform: uppercase;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            color: #e8d8c8;
+            text-decoration: none;
+            border-radius: 7px;
+            font-size: 14px;
+            transition: .2s;
+        }
+
+        .sidebar-nav a:hover,
+        .sidebar-nav a.active {
+            background: #28551e;
+            color: #fff;
+        }
+
+        .sidebar-nav a i { font-size: 17px; }
+
+        .main-content {
+            flex: 1;
+            padding: 28px 34px;
+            overflow-x: auto;
+        }
+
+        .page-header { margin-bottom: 24px; }
+        .page-header h1 { font: 700 28px "Playfair Display", serif; margin: 0; color: #2b1206; }
+        .page-header p { margin: 4px 0 0; color: #7a6350; font-size: 14px; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-bottom: 26px;
+        }
+
+        .stat-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 3px 12px #0001;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            font-size: 22px;
+        }
+
+        .bg-green { background: #28551e; }
+        .bg-blue { background: #2c6eb5; }
+        .bg-orange { background: #c9863b; }
+        .bg-brown { background: #7a4a2a; }
+
+        .stat-card small { font-size: 12px; color: #7a6350; display: block; }
+        .stat-card h3 { font: 700 24px "Playfair Display", serif; margin: 2px 0 0; color: #2b1206; }
+
+        .panel {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px 22px;
+            box-shadow: 0 3px 12px #0001;
+            margin-bottom: 22px;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .panel-header h3 { font: 700 18px "Playfair Display", serif; margin: 0; color: #2b1206; }
+
+        .table { width: 100%; border-collapse: collapse; }
+
+        .table th {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 2px solid #eadccc;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #7a6350;
+        }
+
+        .table td {
+            padding: 11px 10px;
+            border-bottom: 1px solid #f0e4d6;
+            font-size: 14px;
+            color: #2b1206;
+        }
+
+        .empty-state { text-align: center; padding: 30px !important; color: #9a826b; }
+
+        .btn-outline {
+            background: none;
+            border: 1px solid #c9863b;
+            color: #c9863b;
+            padding: 7px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .btn-outline:disabled { opacity: .5; cursor: not-allowed; }
+
+        @media (max-width: 800px) {
+            .dashboard-wrap { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: static; }
+            .main-content { padding: 20px; }
+        }
+    </style>
+
+    {% block stylesheets %}{% endblock %}
+</head>
+
+<body>
+
+<div class="dashboard-wrap">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <span class="cup">☕</span>
+            <div>
+                <b>FUNDADOR</b>
+                <small>COFFEE SHOP</small>
+            </div>
+        </div>
+
+        {% block sidebar %}
+        <nav class="sidebar-nav">
+            <span class="nav-label">MAIN</span>
+
+            <a href="{{ path('dashboard') }}" class="{{ app.request.attributes.get('_route') == 'dashboard' ? 'active' }}">
+                <i class="bi bi-speedometer2"></i><span>Dashboard</span>
+            </a>
+
+            <a href="{{ path('dashboard_products') }}" class="{{ app.request.attributes.get('_route') starts with 'dashboard_products' ? 'active' }}">
+                <i class="bi bi-cup-hot"></i><span>Products</span>
+            </a>
+
+            <a href="{{ path('dashboard_orders') }}" class="{{ app.request.attributes.get('_route') starts with 'dashboard_orders' ? 'active' }}">
+                <i class="bi bi-receipt"></i><span>Orders</span>
+            </a>
+
+            <a href="{{ path('dashboard_users') }}" class="{{ app.request.attributes.get('_route') starts with 'dashboard_users' ? 'active' }}">
+                <i class="bi bi-people"></i><span>Users</span>
+            </a>
+
+            <span class="nav-label">REPORTS</span>
+
+            
+
+            <a href="#">
+                <i class="bi bi-gear"></i><span>Settings</span>
+            </a>
+        </nav>
+        {% endblock %}
+    </aside>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+            <p>{% block page_subtitle %}Welcome back{% endblock %}</p>
+        </div>
+
+        {% block content %}{% endblock %}
+    </main>
+
+</div>
+
+<script src="{{ asset('js/script.js') }}"></script>
+{% block javascripts %}{% endblock %}
+
+</body>
+</html>

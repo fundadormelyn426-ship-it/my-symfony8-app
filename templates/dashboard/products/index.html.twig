@@ -1,0 +1,189 @@
+{% extends 'dashboard/layout.html.twig' %}
+
+{% block page_title %}Products{% endblock %}
+{% block page_subtitle %}Manage your coffee shop products{% endblock %}
+
+{% block content %}
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon bg-green"><i class="bi bi-cup-hot"></i></div>
+        <div>
+            <small>Total Products</small>
+            <h3>{{ products|length }}</h3>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon bg-blue"><i class="bi bi-check-circle"></i></div>
+        <div>
+            <small>Available</small>
+            <h3>{{ products|filter(p => p.isAvailable)|length }}</h3>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon bg-orange"><i class="bi bi-exclamation-triangle"></i></div>
+        <div>
+            <small>Low Stock (≤5)</small>
+            <h3>{{ products|filter(p => p.stock <= 5)|length }}</h3>
+        </div>
+    </div>
+</div>
+
+{% for flash in app.flashes('success') %}
+    <div style="background:#eaf3e7;padding:12px;border-radius:8px;margin-bottom:16px;color:#28551e;">
+        ✓ {{ flash }}
+    </div>
+{% endfor %}
+
+<div class="panel">
+    <div class="panel-header">
+        <h3>All Products</h3>
+        <button onclick="openProductModal()" class="btn-outline" style="cursor:pointer;">+ Add Product</button>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>
+                    {% if product.image %}
+                        <img src="{{ asset('assets/' ~ product.image) }}" alt="{{ product.name }}" style="width:50px;height:50px;object-fit:cover;border-radius:6px;">
+                    {% else %}
+                        <span style="color:#9a826b;">—</span>
+                    {% endif %}
+                </td>
+                <td><b>{{ product.name }}</b></td>
+                <td>{{ product.category ?? '—' }}</td>
+                <td>₱{{ product.price|number_format(2) }}</td>
+                <td>{{ product.stock ?? 0 }}</td>
+                <td>
+                    {% if product.isAvailable %}
+                        <span style="color:#28551e;font-weight:700;">✓ Available</span>
+                    {% else %}
+                        <span style="color:#a13b27;font-weight:700;">✗ Unavailable</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <button onclick="editProduct({{ product.id }}, '{{ product.name|e('js') }}', '{{ product.description|e('js') }}', {{ product.price }}, {{ product.stock ?? 0 }}, '{{ product.category|e('js') }}', '{{ product.image|e('js') }}', {{ product.isAvailable ? 'true' : 'false' }})" style="background:#c9863b;color:#fff;border:0;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;">Edit</button>
+                    <form method="post" action="{{ path('dashboard_products_delete', {id: product.id}) }}" style="display:inline;" onsubmit="return confirm('Delete this product?');">
+                        <button type="submit" style="background:none;border:0;color:#a13b27;cursor:pointer;font-size:12px;">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="7" class="empty-state">
+                    ☕ No products yet.<br>
+                    <small>Click "Add Product" to get started.</small>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div id="productModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;overflow-y:auto;">
+    <div style="background:#fff;max-width:600px;margin:50px auto;padding:30px;border-radius:12px;position:relative;">
+        <button onclick="closeProductModal()" style="position:absolute;top:14px;right:18px;background:none;border:0;font-size:24px;cursor:pointer;color:#7a6350;">×</button>
+        <h2 id="modalTitle" style="font:700 22px 'Playfair Display',serif;color:#2b1206;margin:0 0 20px;">Add Product</h2>
+        
+        <form method="post" action="{{ path('dashboard_products_new') }}" id="productForm" style="display:grid;gap:14px;">
+            <div>
+                <label style="display:block;font-size:13px;margin-bottom:5px;color:#7a6350;">Product Name *</label>
+                <input type="text" name="name" id="p_name" required style="width:100%;padding:10px;border:1px solid #d8c5b2;border-radius:7px;">
+            </div>
+            <div>
+                <label style="display:block;font-size:13px;margin-bottom:5px;color:#7a6350;">Description</label>
+                <textarea name="description" id="p_description" rows="2" style="width:100%;padding:10px;border:1px solid #d8c5b2;border-radius:7px;"></textarea>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+                <div>
+                    <label style="display:block;font-size:13px;margin-bottom:5px;color:#7a6350;">Price (₱) *</label>
+                    <input type="number" step="0.01" name="price" id="p_price" required style="width:100%;padding:10px;border:1px solid #d8c5b2;border-radius:7px;">
+                </div>
+                <div>
+                    <label style="display:block;font-size:13px;margin-bottom:5px;color:#7a6350;">Stock</label>
+                    <input type="number" name="stock" id="p_stock" value="0" style="width:100%;padding:10px;border:1px solid #d8c5b2;border-radius:7px;">
+                </div>
+            </div>
+            <div>
+                <label style="display:block;font-size:13px;margin-bottom:5px;color:#7a6350;">Category</label>
+                <select name="category" id="p_category" style="width:100%;padding:10px;border:1px solid #d8c5b2;border-radius:7px;">
+                    <option value="Coffee">Coffee</option>
+                    <option value="Iced Coffee">Iced Coffee</option>
+                    <option value="Pastries">Pastries</option>
+                    <option value="Desserts">Desserts</option>
+                    <option value="Non-Coffee">Non-Coffee</option>
+                </select>
+            </div>
+            <div>
+                <label style="display:block;font-size:13px;margin-bottom:5px;color:#7a6350;">Image Filename</label>
+                <input type="text" name="image" id="p_image" placeholder="latte.jpg" style="width:100%;padding:10px;border:1px solid #d8c5b2;border-radius:7px;">
+                <small style="color:#9a826b;font-size:11px;">Available: latte.jpg, iced-latte.jpg, croissant.jpg, cheesecake.jpg</small>
+            </div>
+            <div>
+                <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+                    <input type="checkbox" name="isAvailable" id="p_available" checked>
+                    <span style="font-size:14px;">Available for order</span>
+                </label>
+            </div>
+            <div style="display:flex;gap:10px;margin-top:8px;">
+                <button type="submit" style="background:#28551e;color:#fff;border:0;padding:11px 22px;border-radius:7px;cursor:pointer;font-weight:600;" id="submitBtn">Save Product</button>
+                <button type="button" onclick="closeProductModal()" style="background:#e8d8c8;color:#2b1206;border:0;padding:11px 22px;border-radius:7px;cursor:pointer;font-weight:600;">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openProductModal() {
+    document.getElementById('modalTitle').textContent = 'Add Product';
+    document.getElementById('productForm').action = '{{ path("dashboard_products_new") }}';
+    document.getElementById('p_name').value = '';
+    document.getElementById('p_description').value = '';
+    document.getElementById('p_price').value = '';
+    document.getElementById('p_stock').value = '0';
+    document.getElementById('p_category').value = 'Coffee';
+    document.getElementById('p_image').value = '';
+    document.getElementById('p_available').checked = true;
+    document.getElementById('submitBtn').textContent = 'Save Product';
+    document.getElementById('productModal').style.display = 'block';
+}
+
+function editProduct(id, name, description, price, stock, category, image, isAvailable) {
+    document.getElementById('modalTitle').textContent = 'Edit Product';
+    document.getElementById('productForm').action = '/dashboard/products/' + id + '/edit';
+    document.getElementById('p_name').value = name;
+    document.getElementById('p_description').value = description || '';
+    document.getElementById('p_price').value = price;
+    document.getElementById('p_stock').value = stock || 0;
+    document.getElementById('p_category').value = category || 'Coffee';
+    document.getElementById('p_image').value = image || '';
+    document.getElementById('p_available').checked = isAvailable;
+    document.getElementById('submitBtn').textContent = 'Update Product';
+    document.getElementById('productModal').style.display = 'block';
+}
+
+function closeProductModal() {
+    document.getElementById('productModal').style.display = 'none';
+}
+
+document.getElementById('productModal').addEventListener('click', function(e) {
+    if (e.target === this) closeProductModal();
+});
+</script>
+
+{% endblock %}

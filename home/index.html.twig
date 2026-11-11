@@ -1,0 +1,336 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fundador Coffee Shop{% endblock %}
+
+{% block body %}
+
+<header class="header">
+    <div class="nav">
+        <a class="logo" href="#home">
+            <span class="cup">☕</span>
+            <span>
+                <b>FUNDADOR</b>
+                <small>COFFEE SHOP</small>
+                <i>— EST 2026 —</i>
+            </span>
+        </a>
+
+        <button class="hamb" id="hamb">☰</button>
+
+        <nav id="nav">
+            <a class="active" href="#home">Home</a>
+            <a href="#menu">Menu</a>
+            <a href="#about">About Us</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#contact">Contact</a>
+
+            {% if app.user %}
+                <a href="{{ path('dashboard') }}">Dashboard</a>
+                <a href="{{ path('app_logout') }}">Logout</a>
+            {% else %}
+                <a href="{{ path('app_login') }}">Login</a>
+                <a href="{{ path('app_register') }}">Register</a>
+            {% endif %}
+
+            <a class="order-link" href="#order">☕ &nbsp; Order Now</a>
+        </nav>
+    </div>
+</header>
+
+
+<main>
+
+    {# ================= HERO ================= #}
+    <section id="home" class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-shade"></div>
+
+        <div class="hero-inner">
+            <p class="eyebrow">GOOD COFFEE. GOOD MOOD.</p>
+            <h1>
+                Freshly Brewed.<br>
+                Made With <em>Passion.</em>
+            </h1>
+            <p class="lead">
+                Handcrafted coffee, delicious pastries, and<br>
+                warm moments made especially for you.
+            </p>
+            <div class="buttons">
+                <a class="btn green" href="#order">☕ &nbsp; Order Now</a>
+                <a class="btn outline" href="#menu">Explore Menu</a>
+            </div>
+        </div>
+
+        <div class="dots">
+            <span class="on"></span>
+            <span></span>
+            <span></span>
+        </div>
+    </section>
+
+
+    {# ================= BEST SELLERS ================= #}
+    <section class="sellers" id="menu">
+        <div class="wrap">
+            <div class="heading">
+                <span></span>
+                <div>
+                    <h2>OUR BEST SELLERS</h2>
+                    <p>Customer favorites, made with love.</p>
+                </div>
+                <span></span>
+            </div>
+
+            <div class="cards">
+                <article class="card">
+                    <img src="{{ asset('assets/latte.jpg') }}" alt="Latte">
+                    <div>
+                        <h3>Signature Latte</h3>
+                        <p>Rich, smooth and perfectly balanced.</p>
+                        <b>₱120.00</b>
+                        <small class="stock-label">Available</small>
+                        <button class="add" data-id="1">🛒 &nbsp; Add to Order</button>
+                    </div>
+                </article>
+
+                <article class="card">
+                    <img src="{{ asset('assets/iced-latte.jpg') }}" alt="Iced Latte">
+                    <div>
+                        <h3>Ice Caramel Latte</h3>
+                        <p>A sweet and creamy caramel delight.</p>
+                        <b>₱130.00</b>
+                        <small class="stock-label">Available</small>
+                        <button class="add" data-id="2">🛒 &nbsp; Add to Order</button>
+                    </div>
+                </article>
+
+                <article class="card">
+                    <img src="{{ asset('assets/croissant.jpg') }}" alt="Croissant">
+                    <div>
+                        <h3>Butter Croissant</h3>
+                        <p>Buttery, flaky and baked to perfection.</p>
+                        <b>₱95.00</b>
+                        <small class="stock-label">Available</small>
+                        <button class="add" data-id="3">🛒 &nbsp; Add to Order</button>
+                    </div>
+                </article>
+
+                <article class="card">
+                    <img src="{{ asset('assets/cheesecake.jpg') }}" alt="Cheesecake">
+                    <div>
+                        <h3>Blueberry Cheesecake</h3>
+                        <p>Creamy cheesecake with a fruity topping.</p>
+                        <b>₱145.00</b>
+                        <small class="stock-label">Available</small>
+                        <button class="add" data-id="4">🛒 &nbsp; Add to Order</button>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+
+    {# ================= ABOUT ================= #}
+    <section class="about" id="about">
+        <div class="about-img">
+            <img src="{{ asset('assets/gallery-cup.jpg') }}" alt="About Fundador">
+        </div>
+
+        <div class="about-copy">
+            <p class="eyebrow brown">ABOUT US</p>
+            <h2>More Than Just Coffee</h2>
+            <p>
+                Fundador Coffee Shop is committed to serving
+                premium-quality coffee and handcrafted beverages
+                in a warm and welcoming environment.
+            </p>
+
+            <div class="features">
+                <div>
+                    <span>☕</span>
+                    <b>Premium Coffee</b>
+                    <small>Sourced from quality beans</small>
+                </div>
+                <div>
+                    <span>🥐</span>
+                    <b>Freshly Baked</b>
+                    <small>Pastries made with love</small>
+                </div>
+                <div>
+                    <span>♡</span>
+                    <b>Made With Passion</b>
+                    <small>In every cup and every bite</small>
+                </div>
+                <div>
+                    <span>🍃</span>
+                    <b>Warm &amp; Welcoming</b>
+                    <small>A cozy place for everyone</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    {# ================= GALLERY ================= #}
+    <section class="gallery" id="gallery">
+        <div class="wrap">
+            <div class="heading">
+                <span></span>
+                <div>
+                    <h2>OUR MENU &amp; GALLERY</h2>
+                    <p>Take a look at our drinks, pastries and cozy space.</p>
+                </div>
+                <span></span>
+            </div>
+
+            <div class="tabs">
+                <button class="selected" data-filter="all">Coffee</button>
+                <button data-filter="iced">Iced Coffee</button>
+                <button data-filter="pastry">Pastries</button>
+                <button data-filter="dessert">Desserts</button>
+                <button data-filter="noncoffee">Non-Coffee</button>
+            </div>
+
+            <div class="gallery-grid">
+                <img data-type="coffee" src="{{ asset('assets/latte.jpg') }}" alt="Latte">
+                <img data-type="iced" src="{{ asset('assets/iced-latte.jpg') }}" alt="Iced Latte">
+                <img data-type="pastry" src="{{ asset('assets/croissant.jpg') }}" alt="Croissant">
+                <img class="wide" data-type="coffee" src="{{ asset('assets/gallery-cafe.jpg') }}" alt="Coffee Shop">
+                <img data-type="coffee" src="{{ asset('assets/gallery-table.jpg') }}" alt="Coffee Table">
+                <img data-type="coffee" src="{{ asset('assets/gallery-counter.jpg') }}" alt="Coffee Counter">
+            </div>
+
+            <button class="full-gallery">▣ &nbsp; View Full Menu &amp; Gallery</button>
+        </div>
+    </section>
+
+
+    {# ================= OFFERS ================= #}
+    <section class="offers">
+        <div class="offers-box">
+            <div class="heading small">
+                <span></span>
+                <div>
+                    <h2>SPECIAL OFFERS</h2>
+                    <p>Great coffee. Greater deals.</p>
+                </div>
+                <span></span>
+            </div>
+
+            <div class="offer-grid">
+                <div class="offer">
+                    <div>
+                        <label>WEEKDAYS DEAL</label>
+                        <h3>10% OFF</h3>
+                        <p>Monday to Friday<br>7:00 AM – 11:00 AM</p>
+                    </div>
+                    <img src="{{ asset('assets/offer-morning.jpg') }}" alt="Morning Coffee">
+                </div>
+
+                <div class="offer">
+                    <div>
+                        <label>SWEET BUNDLE</label>
+                        <h3>BUY 1<br>GET 1 <small>50% OFF</small></h3>
+                        <p>On all pastries</p>
+                    </div>
+                    <img src="{{ asset('assets/offer-pastry.jpg') }}" alt="Pastry Offer">
+                </div>
+
+                <div class="offer">
+                    <div>
+                        <label>STUDENT DISCOUNT</label>
+                        <h3>15% OFF</h3>
+                        <p>All Orders<br>Just show your valid ID.</p>
+                    </div>
+                    <img src="{{ asset('assets/offer-student.jpg') }}" alt="Student Discount">
+                </div>
+
+                <div class="social">
+                    <span>☕</span>
+                    <h3>Stay Updated!</h3>
+                    <p>Follow us on our social<br>media for more promos.</p>
+                    <b>f &nbsp; ◎ &nbsp; ♪</b>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    {# ================= FOOTER ================= #}
+    <section class="footer" id="contact">
+        <div class="footer-grid">
+            <div class="review">
+                <label>WHAT OUR CUSTOMERS SAY</label>
+                <div>★★★★★</div>
+                <p>"The coffee is smooth, delicious, and the place feels so welcoming."</p>
+                <b>— Maria S.</b>
+            </div>
+
+            <div class="cta" id="order">
+                <h2>Your Perfect Cup<br>Is Waiting.</h2>
+                <p>Visit Fundador Coffee Shop and enjoy coffee made with passion.</p>
+                <a class="btn green" href="#menu">☕ &nbsp; Order Now</a>
+            </div>
+
+            <div class="contact">
+                <label>CONTACT US</label>
+                <p>📍 Near in Daro, Dumaguete City</p>
+                <p>☎ +63 912 345 6789</p>
+                <p>✉ hello@fundadorcoffeeshop.com</p>
+                <p>◷ Mon - Sun | 7:00 AM - 9:00 PM</p>
+                <b>f &nbsp; ◎ &nbsp; ♪</b>
+            </div>
+        </div>
+
+        <div class="copyright">
+            © 2026 Fundador Coffee Shop. All Rights Reserved.
+        </div>
+    </section>
+
+</main>
+
+
+{# ================= CART ================= #}
+<div class="cart" id="cart">
+    <div class="cart-head">
+        <h2>Your Order</h2>
+        <button id="close">×</button>
+    </div>
+
+    <div id="items">
+        <p>Your order is empty.</p>
+    </div>
+
+    <div class="total">
+        <b>Total</b>
+        <b id="total">₱0.00</b>
+    </div>
+
+    <div id="checkoutForm" class="checkout-form">
+        <div class="payment-box">
+            <strong>Payment Method</strong>
+            <label><input type="radio" name="payment_method" value="Cash"> 💵 Cash</label>
+            <label><input type="radio" name="payment_method" value="GCash"> 📱 GCash</label>
+        </div>
+
+        <div id="gcashReferenceBox" style="display:none">
+            <input id="gcashReference" maxlength="100" placeholder="GCash receipt/reference number">
+        </div>
+
+        <button id="checkout">Place Order</button>
+    </div>
+</div>
+
+<button class="cart-float" id="cartOpen">
+    🛒 <span id="count">0</span>
+</button>
+
+<div class="toast" id="toast"></div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/script.js') }}"></script>
+{% endblock %}

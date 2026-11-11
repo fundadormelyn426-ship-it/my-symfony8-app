@@ -1,0 +1,67 @@
+{% extends 'dashboard/layout.html.twig' %}
+
+{% block page_title %}{{ product ? 'Edit Product' : 'Add Product' }}{% endblock %}
+{% block page_subtitle %}{{ product ? 'Update product details' : 'Create a new product' }}{% endblock %}
+
+{% block content %}
+
+<div class="panel" style="max-width:700px;">
+    <form method="post" style="display:grid;gap:14px;">
+
+        <div>
+            <label style="display:block;font-size:13px;margin-bottom:5px;color:#7a6350;">Product Name *</label>
+            <input type="text" name="name" required value="{{ product ? product.name : '' }}" style="width:100%;padding:10px;border:1px solid #d8c5b2;border-radius:7px;">
+        </div>
+
+        <div>
+            <label style="display:block;font-size:13px;margin-bottom:5px;color:#7a6350;">Description</label>
+            <textarea name="description" rows="3" style="width:100%;padding:10px;border:1px solid #d8c5b2;border-radius:7px;">{{ product ? product.description : '' }}</textarea>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <div>
+                <label style="display:block;font-size:13px;margin-bottom:5px;color:#7a6350;">Price (₱) *</label>
+                <input type="number" step="0.01" min="0" name="price" required value="{{ product ? product.price : '' }}" style="width:100%;padding:10px;border:1px solid #d8c5b2;border-radius:7px;">
+            </div>
+            <div>
+                <label style="display:block;font-size:13px;margin-bottom:5px;color:#7a6350;">Stock</label>
+                <input type="number" min="0" name="stock" value="{{ product ? product.stock : 0 }}" style="width:100%;padding:10px;border:1px solid #d8c5b2;border-radius:7px;">
+            </div>
+        </div>
+
+        <div>
+            <label style="display:block;font-size:13px;margin-bottom:5px;color:#7a6350;">Category</label>
+            {% set currentCategory = product ? product.category : 'Coffee' %}
+            <select name="category" style="width:100%;padding:10px;border:1px solid #d8c5b2;border-radius:7px;">
+                <option value="Coffee" {{ currentCategory == 'Coffee' ? 'selected' }}>Coffee</option>
+                <option value="Iced Coffee" {{ currentCategory == 'Iced Coffee' ? 'selected' }}>Iced Coffee</option>
+                <option value="Pastries" {{ currentCategory == 'Pastries' ? 'selected' }}>Pastries</option>
+                <option value="Desserts" {{ currentCategory == 'Desserts' ? 'selected' }}>Desserts</option>
+                <option value="Non-Coffee" {{ currentCategory == 'Non-Coffee' ? 'selected' }}>Non-Coffee</option>
+            </select>
+        </div>
+
+        <div>
+            <label style="display:block;font-size:13px;margin-bottom:5px;color:#7a6350;">Image Filename</label>
+            <input type="text" name="image" placeholder="latte.jpg" value="{{ product ? product.image : '' }}" style="width:100%;padding:10px;border:1px solid #d8c5b2;border-radius:7px;">
+            <small style="color:#9a826b;font-size:11px;">Available: latte.jpg, iced-latte.jpg, croissant.jpg, cheesecake.jpg</small>
+        </div>
+
+        <div>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+                <input type="checkbox" name="isAvailable" {{ (product and product.isAvailable) or (not product) ? 'checked' }}>
+                <span style="font-size:14px;">Available for order</span>
+            </label>
+        </div>
+
+        <div style="display:flex;gap:10px;margin-top:8px;">
+            <button type="submit" style="background:#28551e;color:#fff;border:0;padding:11px 22px;border-radius:7px;cursor:pointer;font-weight:600;">
+                {{ product ? 'Update Product' : 'Save Product' }}
+            </button>
+            <a href="{{ path('dashboard_products') }}" style="background:#e8d8c8;color:#2b1206;text-decoration:none;padding:11px 22px;border-radius:7px;font-weight:600;">Cancel</a>
+        </div>
+
+    </form>
+</div>
+
+{% endblock %}

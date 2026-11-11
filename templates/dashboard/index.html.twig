@@ -1,0 +1,43 @@
+{% extends 'dashboard/layout.html.twig' %}
+
+{% block page_title %}Dashboard{% endblock %}
+{% block page_subtitle %}Welcome back to Fundador Coffee Shop{% endblock %}
+
+{% block content %}
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon bg-green"><i class="bi bi-cup-hot"></i></div>
+        <div>
+            <small>Total Products</small>
+            <h3>{{ productCount }}</h3>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon bg-orange"><i class="bi bi-receipt"></i></div>
+        <div>
+            <small>Total Orders</small>
+            <h3>0</h3>
+        </div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon bg-blue"><i class="bi bi-people"></i></div>
+        <div>
+            <small>Total Users</small>
+            <h3>0</h3>
+        </div>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-header">
+        <h3>Welcome to Fundador Dashboard</h3>
+    </div>
+    <p style="color:#7a6350;font-size:14px;padding:10px 0;">
+        Use the sidebar navigation to manage products, orders, users, and view sales reports.
+    </p>
+</div>
+
+{% endblock %}

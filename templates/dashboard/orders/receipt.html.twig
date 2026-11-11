@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Receipt — Fundador Coffee Shop{% endblock %}
+
+{% block body %}
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f7efe5;padding:20px;">
+    <div style="background:#fff;padding:40px;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.08);width:100%;max-width:560px;">
+
+        <h1 style="font-family:'Playfair Display',serif;font-size:26px;color:#281105;margin:0 0 8px;">
+            Thank you for your order!
+        </h1>
+
+        <div style="color:#7a6a5d;font-size:13px;line-height:1.8;margin-bottom:24px;">
+            <div><b>Order:</b> <span style="color:#281105;">#---</span> · <span style="color:#f59e0b;">Pending</span></div>
+            <div><b>Customer:</b> ---</div>
+            <div><b>Payment:</b> Cash</div>
+        </div>
+
+        <table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:24px;">
+            <thead>
+                <tr style="border-bottom:1px solid #e5d8c8;">
+                    <th style="text-align:left;padding:10px 0;font-size:12px;color:#7a6a5d;">Item</th>
+                    <th style="text-align:center;padding:10px 0;font-size:12px;color:#7a6a5d;">Qty</th>
+                    <th style="text-align:right;padding:10px 0;font-size:12px;color:#7a6a5d;">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="3" style="text-align:center;padding:30px 0;color:#999;font-size:13px;">
+                        Items will appear here once order is placed.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="text-align:right;font-size:18px;font-weight:700;color:#281105;border-top:1px solid #e5d8c8;padding-top:16px;margin-bottom:24px;">
+            ₱0.00
+        </div>
+
+        <div style="display:flex;gap:10px;">
+            <a href="{{ path('home') }}" style="flex:1;text-align:center;padding:12px;background:#28551e;color:#fff;text-decoration:none;border-radius:8px;font-size:13px;font-weight:600;">
+                Back to Shop
+            </a>
+            <button onclick="window.print()" style="flex:1;padding:12px;background:transparent;color:#28551e;border:2px solid #28551e;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">
+                Print
+            </button>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

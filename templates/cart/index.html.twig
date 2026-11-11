@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Your Cart - Fundador Coffee Shop{% endblock %}
+
+{% block body %}
+
+<header class="header">
+    <div class="nav">
+        <a class="logo" href="{{ path('home') }}">
+            <span class="cup">☕</span>
+            <span>
+                <b>FUNDADOR</b>
+                <small>COFFEE SHOP</small>
+            </span>
+        </a>
+        <nav>
+            <a href="{{ path('home') }}">Shop</a>
+            <a href="{{ path('app_cart') }}" class="active">Cart ({{ cart|length }})</a>
+            {% if app.user %}
+                <a href="{{ path('dashboard') }}">Dashboard</a>
+                <a href="{{ path('app_logout') }}">Logout</a>
+            {% else %}
+                <a href="{{ path('app_login') }}">Login</a>
+                <a href="{{ path('app_register') }}">Register</a>
+            {% endif %}
+        </nav>
+    </div>
+</header>
+
+<main style="padding:28px;width:min(1100px,94%);margin:auto;">
+    <h1 style="font:700 32px 'Playfair Display',serif;color:#2b1206;">Your Cart</h1>
+
+    {% for flash in app.flashes('success') %}
+        <div style="background:#eaf3e7;padding:12px;border-radius:8px;margin-bottom:16px;color:#28551e;">
+            ✓ {{ flash }}
+        </div>
+    {% endfor %}
+
+    {% if cart|length == 0 %}
+        <div style="background:#fffaf3;padding:60px 20px;border-radius:12px;text-align:center;margin-top:20px;">
+            <p style="font-size:60px;margin:0;">🛒</p>
+            <h2 style="font:600 22px 'Playfair Display',serif;color:#2b1206;">Your cart is empty</h2>
+            <p style="color:#7a6350;">Add some coffee or pastries to get started.</p>
+            <a href="{{ path('home') }}" style="display:inline-block;background:#28551e;color:#fff;padding:11px 24px;border-radius:7px;text-decoration:none;font-weight:600;margin-top:14px;">Browse Menu</a>
+        </div>
+    {% else %}
+        <table style="width:100%;border-collapse:collapse;background:#fffaf3;border-radius:12px;overflow:hidden;margin-top:20px;">
+            <thead>
+                <tr style="background:#f0ddc5;">
+                    <th style="padding:14px;text-align:left;">Product</th>
+                    <th style="padding:14px;text-align:right;">Price</th>
+                    <th style="padding:14px;text-align:center;">Quantity</th>
+                    <th style="padding:14px;text-align:right;">Subtotal</th>
+                    <th style="padding:14px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart %}
+                <tr style="border-bottom:1px solid #eadccc;">
+                    <td style="padding:14px;">
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            {% if item.image %}
+                                <img src="{{ asset('assets/' ~ item.image) }}" alt="{{ item.name }}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;">
+                            {% endif %}
+                            <b style="color:#2b1206;">{{ item.name }}</b>
+                        </div>
+                    </td>
+                    <td style="padding:14px;text-align:right;">₱{{ item.price|number_format(2) }}</td>
+                    <td style="padding:14px;text-align:center;">
+                        <form method="post" action="{{ path('app_cart_update', {id: item.id}) }}" style="display:inline-flex;gap:6px;align-items:center;">
+                            <input type="number" name="quantity" value="{{ item.quantity }}" min="1" style="width:60px;padding:6px;border:1px solid #d8c5b2;border-radius:6px;text-align:center;">
+                            <button type="submit" style="background:#c9863b;color:#fff;border:0;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;">Update</button>
+                        </form>
+                    </td>
+                    <td style="padding:14px;text-align:right;font-weight:700;color:#28551e;">
+                        ₱{{ (item.price * item.quantity)|number_format(2) }}
+                    </td>
+                    <td style="padding:14px;text-align:right;">
+                        <form method="post" action="{{ path('app_cart_remove', {id: item.id}) }}" onsubmit="return confirm('Remove this item?');">
+                            <button type="submit" style="background:none;border:0;color:#a13b27;cursor:pointer;font-size:14px;">✗ Remove</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr style="background:#f7efe5;">
+                    <td colspan="3" style="padding:16px;text-align:right;font-weight:700;">Total:</td>
+                    <td colspan="2" style="padding:16px;font-weight:700;color:#28551e;font-size:20px;">₱{{ total|number_format(2) }}</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div style="display:flex;justify-content:space-between;margin-top:20px;gap:12px;flex-wrap:wrap;">
+            <form method="post" action="{{ path('app_cart_clear') }}" onsubmit="return confirm('Clear the entire cart?');">
+                <button type="submit" style="background:none;border:1px solid #a13b27;color:#a13b27;padding:11px 20px;border-radius:7px;cursor:pointer;">Clear Cart</button>
+            </form>
+            <div style="display:flex;gap:12px;">
+                <a href="{{ path('home') }}" style="background:#e8d8c8;color:#2b1206;padding:11px 20px;border-radius:7px;text-decoration:none;font-weight:600;">Continue Shopping</a>
+                <a href="{{ path('app_checkout') }}" style="background:#28551e;color:#fff;padding:11px 24px;border-radius:7px;text-decoration:none;font-weight:600;">Checkout →</a>
+            </div>
+        </div>
+    {% endif %}
+</main>
+
+{% endblock %}

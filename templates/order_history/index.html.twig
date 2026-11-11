@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Orders - Fundador Coffee Shop{% endblock %}
+
+{% block body %}
+
+<header class="header">
+    <div class="nav">
+        <a class="logo" href="{{ path('home') }}">
+            <span class="cup">☕</span>
+            <span>
+                <b>FUNDADOR</b>
+                <small>COFFEE SHOP</small>
+            </span>
+        </a>
+        <nav>
+            <a href="{{ path('home') }}">Shop</a>
+            <a href="{{ path('app_cart') }}">Cart</a>
+            <a href="{{ path('app_my_orders') }}" class="active">My Orders</a>
+            {% if app.user %}
+                <a href="{{ path('app_logout') }}">Logout</a>
+            {% endif %}
+        </nav>
+    </div>
+</header>
+
+<main style="padding:28px;width:min(1100px,94%);margin:auto;">
+    <h1 style="font:700 32px 'Playfair Display',serif;color:#2b1206;">My Orders</h1>
+    <p style="color:#7a6350;">View your order history and track your orders.</p>
+
+    {% if orders|length == 0 %}
+        <div style="background:#fffaf3;padding:60px 20px;border-radius:12px;text-align:center;margin-top:20px;">
+            <p style="font-size:60px;margin:0;">📦</p>
+            <h2 style="font:600 22px 'Playfair Display',serif;color:#2b1206;">No orders yet</h2>
+            <p style="color:#7a6350;">Your orders will appear here once you place one.</p>
+            <a href="{{ path('home') }}" style="display:inline-block;background:#28551e;color:#fff;padding:11px 24px;border-radius:7px;text-decoration:none;font-weight:600;margin-top:14px;">Browse Menu</a>
+        </div>
+    {% else %}
+        <table style="width:100%;border-collapse:collapse;background:#fffaf3;border-radius:12px;overflow:hidden;margin-top:20px;">
+            <thead>
+                <tr style="background:#f0ddc5;">
+                    <th style="padding:14px;text-align:left;">Order #</th>
+                    <th style="padding:14px;text-align:left;">Date</th>
+                    <th style="padding:14px;text-align:right;">Total</th>
+                    <th style="padding:14px;text-align:left;">Payment</th>
+                    <th style="padding:14px;text-align:left;">Status</th>
+                    <th style="padding:14px;text-align:right;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr style="border-bottom:1px solid #eadccc;">
+                    <td style="padding:14px;"><b style="color:#2b1206;">#{{ order.id }}</b></td>
+                    <td style="padding:14px;">{{ order.createdAt ? order.createdAt|date('M d, Y H:i') : '—' }}</td>
+                    <td style="padding:14px;text-align:right;font-weight:700;color:#28551e;">₱{{ order.total|number_format(2) }}</td>
+                    <td style="padding:14px;">
+                        {{ order.paymentMethod ?? '—' }}
+                        {% if order.paymentMethod == 'GCash' and order.gcashReference %}
+                            <br><small style="color:#7a6350;">Ref: {{ order.gcashReference }}</small>
+                        {% endif %}
+                    </td>
+                    <td style="padding:14px;">
+                        <span style="font-weight:700;
+                            {% if order.status == 'Completed' %}color:#28551e;
+                            {% elseif order.status == 'Cancelled' %}color:#a13b27;
+                            {% elseif order.status == 'Pending' %}color:#c9863b;
+                            {% else %}color:#2c6eb5;{% endif %}">
+                            {{ order.status }}
+                        </span>
+                    </td>
+                    <td style="padding:14px;text-align:right;white-space:nowrap;">
+    <a href="{{ path('app_my_order_show', {id: order.id}) }}" style="...">View</a>
+    <a href="{{ path('app_receipt', {id: order.id}) }}" style="...">🧾</a>
+</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</main>
+
+{% endblock %}

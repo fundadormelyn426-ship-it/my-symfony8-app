@@ -1,0 +1,145 @@
+/* ============ DASHBOARD GRID ============ */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 24px;
+}
+
+@media (max-width: 968px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============ FORM ============ */
+.product-form {
+    display: grid;
+    gap: 14px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #281105;
+    margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.form-group input:disabled,
+.form-group textarea:disabled {
+    background: #f9f6f1;
+    color: #999;
+    cursor: not-allowed;
+}
+
+.form-group.checkbox label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: normal;
+}
+
+.form-note {
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+    margin: 0;
+}
+
+.btn-primary {
+    padding: 12px;
+    background: var(--green);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-primary:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.btn-outline {
+    padding: 8px 16px;
+    background: transparent;
+    color: var(--green);
+    border: 1px solid var(--green);
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.coming-soon {
+    margin-top: 16px;
+    padding: 10px;
+    background: #fef3c7;
+    color: #92400e;
+    border-radius: 6px;
+    font-size: 11px;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* ============ PANEL HEADER ============ */
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.panel-header h3 { margin: 0; }
+
+/* ============ EMPTY STATE ============ */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px !important;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.empty-state small {
+    display: block;
+    margin-top: 8px;
+    font-size: 12px;
+    color: #b0a094;
+}
+
+/* ============ CHART PLACEHOLDER ============ */
+.chart-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    background: #faf8f3;
+    border-radius: 12px;
+    border: 2px dashed #e5d8c8;
+}
+
+.chart-placeholder span {
+    font-size: 40px;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+.chart-placeholder p {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0;
+}
